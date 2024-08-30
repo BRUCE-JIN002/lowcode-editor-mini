@@ -1,7 +1,7 @@
 import { Divider, Segmented, Tabs } from "antd";
-import Material from "../Material";
-import { Outline } from "../Outline";
-import { Source } from "../Source";
+import Material from "../material";
+import { Outline } from "../outline";
+import { Source } from "../source";
 import classNames from "classnames";
 import {
   AppstoreOutlined,
@@ -11,7 +11,7 @@ import {
   TagsOutlined,
   SwitcherOutlined
 } from "@ant-design/icons";
-import { Settings } from "../Setting";
+import { Settings } from "../setting";
 
 export const enum Category {
   Material = "物料",

@@ -1,6 +1,6 @@
 import { Dropdown, Menu, MenuProps, Modal } from "antd";
 import { useFileStore } from "../../store/files";
-import { Preview } from "../Preview";
+import { Preview } from "../preview";
 import { useMemo } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useComponetsStore } from "../../store/components";

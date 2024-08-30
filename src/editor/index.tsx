@@ -1,14 +1,14 @@
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { EditArea } from "./components/EditArea/EditArea";
-import { Setting, Settings } from "./components/Setting";
-import { Category, MaterialWrapper } from "./components/MaterialWrapper";
+import { EditArea } from "./components/editArea";
+import { Setting, Settings } from "./components/setting";
+import { Category, MaterialWrapper } from "./components/materialWrapper";
 import { useComponetsStore } from "./store/components";
-import { Preview } from "./components/Preview";
-import SideBar from "./components/Sidebar/Sidebar";
-import Projects from "./components/Projects/Projects";
+import { Preview } from "./components/preview";
+import SideBar from "./components/sidebar";
+import Projects from "./components/projects";
 import { useState } from "react";
-import Header from "./components/Header";
+import Header from "./components/header";
 
 export default function LowcodeEditor() {
   const { mode, components } = useComponetsStore();

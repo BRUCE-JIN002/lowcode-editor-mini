@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { message } from "antd";
 import { Component } from "../../store/components";
 import { useComponentConfigStore } from "../../store/component-config";
-import { ActionConfig } from "../Setting/ActionModal";
+import { ActionConfig } from "../setting/ActionModal";
 interface PreviewProps {
   components: Component[];
 }
