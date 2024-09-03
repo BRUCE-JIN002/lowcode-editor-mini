@@ -4,7 +4,7 @@ import { EditArea } from "./components/editArea";
 import { Setting, Settings } from "./components/setting";
 import { Category, MaterialWrapper } from "./components/materialWrapper";
 import { useComponetsStore } from "./store/components";
-import { Preview } from "./components/preview";
+import Preview from "./components/preview";
 import SideBar from "./components/sidebar";
 import Projects from "./components/projects";
 import { useState } from "react";

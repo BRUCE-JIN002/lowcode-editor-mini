@@ -70,6 +70,6 @@ export const useFileStore = create<State & Action>()(
       Object.fromEntries(
         Object.entries(state).filter(([key]) => ["files"].includes(key))
       ),
-    version: 1
+    version: 1.1
   })
 );

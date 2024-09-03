@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useComponentConfigStore } from "../../store/component-config";
-import { MaterialItem } from "../materialItem";
+import MaterialItem from "../materialItem";
 
 export default function Material() {
   const { componentConfig } = useComponentConfigStore();

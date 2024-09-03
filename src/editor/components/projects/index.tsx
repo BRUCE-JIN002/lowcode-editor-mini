@@ -1,6 +1,6 @@
 import { Dropdown, Menu, MenuProps, Modal } from "antd";
 import { useFileStore } from "../../store/files";
-import { Preview } from "../preview";
+import Preview from "../preview";
 import { useMemo } from "react";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useComponetsStore } from "../../store/components";
@@ -47,6 +47,7 @@ const Projects = () => {
               },
               {
                 key: "delete",
+                disabled: f.name === "示例页面",
                 label: (
                   <span
                     onClick={() => {
@@ -75,7 +76,7 @@ const Projects = () => {
     return getItem(label, f.name);
   });
 
-  const curPreview = useMemo(
+  const curPreviewFile = useMemo(
     () => getFile(selectedFileKey)?.file ?? [],
     [selectedFileKey]
   );
@@ -94,7 +95,7 @@ const Projects = () => {
         </Allotment.Pane>
         <Allotment.Pane>
           <div className="h-full flex-1">
-            <Preview components={cloneDeep(curPreview)} />
+            <Preview components={cloneDeep(curPreviewFile)} />
           </div>
         </Allotment.Pane>
       </Allotment>

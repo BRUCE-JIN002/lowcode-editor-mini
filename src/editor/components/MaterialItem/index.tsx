@@ -22,7 +22,7 @@ export interface MaterialItemProps {
   desc: string;
 }
 
-export function MaterialItem(props: MaterialItemProps) {
+export default function MaterialItem(props: MaterialItemProps) {
   const { name, desc } = props;
 
   const [_, drag] = useDrag({

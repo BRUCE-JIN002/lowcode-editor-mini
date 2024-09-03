@@ -7,7 +7,7 @@ interface PreviewProps {
   components: Component[];
 }
 
-export function Preview(props: PreviewProps) {
+export default function Preview(props: PreviewProps) {
   const { components } = props;
   const { componentConfig } = useComponentConfigStore();
   const componentRefs = useRef<Record<string, any>>({});
