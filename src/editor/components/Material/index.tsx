@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useComponentConfigStore } from "../../store/component-config";
 import MaterialItem from "../materialItem";
 
-export default function Material() {
+const Material: React.FC = () => {
   const { componentConfig } = useComponentConfigStore();
 
   const components = useMemo(() => {
@@ -24,4 +24,6 @@ export default function Material() {
       })}
     </div>
   );
-}
+};
+
+export default Material;

@@ -8,11 +8,11 @@ interface HoverMaskProps {
   componentId: number;
 }
 
-function HoverMask({
+const HoverMask: React.FC<HoverMaskProps> = ({
   portalWrapperClassName,
   containerClassName,
   componentId
-}: HoverMaskProps) {
+}) => {
   const [position, setPosition] = useState({
     left: 0,
     top: 0,
@@ -120,6 +120,6 @@ function HoverMask({
     </>,
     el
   );
-}
+};
 
 export default HoverMask;

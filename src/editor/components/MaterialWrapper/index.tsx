@@ -1,6 +1,6 @@
 import { Divider, Segmented, Tabs } from "antd";
 import Material from "../material";
-import { Outline } from "../outline";
+import Outline from "../outline";
 import { Source } from "../source";
 import classNames from "classnames";
 import {
@@ -38,7 +38,7 @@ interface MaterialProps {
   onSettingChange: (v: Settings) => void;
 }
 
-export function MaterialWrapper(props: MaterialProps) {
+const MaterialWrapper: React.FC<MaterialProps> = (props) => {
   const { categoryKey, settingKey, onSettingChange, onCategoryChange } = props;
 
   return (
@@ -95,4 +95,6 @@ export function MaterialWrapper(props: MaterialProps) {
       </div>
     </div>
   );
-}
+};
+
+export default MaterialWrapper;

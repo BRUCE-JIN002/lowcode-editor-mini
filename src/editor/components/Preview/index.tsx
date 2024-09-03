@@ -7,7 +7,7 @@ interface PreviewProps {
   components: Component[];
 }
 
-export default function Preview(props: PreviewProps) {
+const Preview: React.FC<PreviewProps> = (props) => {
   const { components } = props;
   const { componentConfig } = useComponentConfigStore();
   const componentRefs = useRef<Record<string, any>>({});
@@ -83,4 +83,6 @@ export default function Preview(props: PreviewProps) {
   }
 
   return <div>{renderComponents(components)}</div>;
-}
+};
+
+export default Preview;

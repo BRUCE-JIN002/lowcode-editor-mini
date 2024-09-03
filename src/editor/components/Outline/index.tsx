@@ -3,7 +3,7 @@ import { MinusOutlined } from "@ant-design/icons";
 import { useComponetsStore } from "../../store/components";
 import { DataNode } from "antd/es/tree";
 
-export function Outline() {
+const Outline: React.FC = () => {
   const { components, curComponentId, setCurComponentId, deleteComponent } =
     useComponetsStore();
 
@@ -37,4 +37,6 @@ export function Outline() {
       }
     />
   );
-}
+};
+
+export default Outline;

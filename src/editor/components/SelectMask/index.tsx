@@ -10,11 +10,11 @@ interface SelectedMaskProps {
   componentId: number;
 }
 
-function SelectedMask({
+const SelectedMask: React.FC<SelectedMaskProps> = ({
   containerClassName,
   portalWrapperClassName,
   componentId
-}: SelectedMaskProps) {
+}) => {
   const [position, setPosition] = useState({
     left: 0,
     top: 0,
@@ -180,6 +180,6 @@ function SelectedMask({
       el
     )
   );
-}
+};
 
 export default SelectedMask;
