@@ -21,7 +21,7 @@ const getItem = (
     icon,
     children,
     label,
-    type
+    type,
   } as MenuItem;
 };
 
@@ -43,7 +43,7 @@ const Projects = () => {
                   <span onClick={() => setComponents(f.name, f.file)}>
                     编辑
                   </span>
-                )
+                ),
               },
               {
                 key: "delete",
@@ -58,15 +58,15 @@ const Projects = () => {
                         onOk: () => {
                           deleteFile(f.name);
                           setFileKey(files[0].name);
-                        }
+                        },
                       });
                     }}
                   >
                     删除
                   </span>
-                )
-              }
-            ]
+                ),
+              },
+            ],
           }}
         >
           <EllipsisOutlined />

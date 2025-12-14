@@ -9,26 +9,26 @@ import {
   CodeOutlined,
   SkinOutlined,
   TagsOutlined,
-  SwitcherOutlined
+  SwitcherOutlined,
 } from "@ant-design/icons";
 import { Settings } from "../setting";
 
 export const enum Category {
   Material = "物料",
   Outlint = "大纲",
-  SourceCode = "源码"
+  SourceCode = "源码",
 }
 
 const categoryOptions: { [key: string]: any } = {
   [Category.Material]: <AppstoreOutlined />,
   [Category.Outlint]: <ApartmentOutlined />,
-  [Category.SourceCode]: <CodeOutlined />
+  [Category.SourceCode]: <CodeOutlined />,
 };
 
 const settingOptions: { [key: string]: any } = {
   [Settings.Attribute]: <SwitcherOutlined />,
   [Settings.Style]: <SkinOutlined />,
-  [Settings.Event]: <TagsOutlined />
+  [Settings.Event]: <TagsOutlined />,
 };
 
 interface MaterialProps {
@@ -59,7 +59,7 @@ const MaterialWrapper: React.FC<MaterialProps> = (props) => {
             return {
               label: ``,
               icon: categoryOptions[name],
-              key: name
+              key: name,
             };
           })}
           style={{ padding: 0, marginLeft: -10 }}
@@ -74,7 +74,7 @@ const MaterialWrapper: React.FC<MaterialProps> = (props) => {
             return {
               label: ``,
               icon: settingOptions[name],
-              key: name
+              key: name,
             };
           })}
           style={{ padding: 0, marginLeft: -10 }}

@@ -37,7 +37,7 @@ const Preview: React.FC<PreviewProps> = (props) => {
                   props: component.props,
                   showMessage(content: string) {
                     message.success(content);
-                  }
+                  },
                 },
                 args
               );
@@ -75,7 +75,7 @@ const Preview: React.FC<PreviewProps> = (props) => {
           },
           ...config.defaultProps,
           ...component.props,
-          ...handleEvent(component)
+          ...handleEvent(component),
         },
         renderComponents(component.children || [])
       );
