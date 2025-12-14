@@ -8,7 +8,8 @@ import SideBar from "./components/sidebar";
 import Projects from "./components/projects";
 import { useState } from "react";
 import Header from "./components/header";
-import MaterialWrapper, { Category } from "./components/materialWrapper";
+import MaterialWrapper from "./components/materialWrapper";
+import { Category } from "./components/materialWrapper/types";
 
 export default function LowcodeEditor() {
   const { mode, components } = useComponetsStore();

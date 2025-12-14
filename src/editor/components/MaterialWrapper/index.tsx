@@ -12,20 +12,15 @@ import {
   SwitcherOutlined,
 } from "@ant-design/icons";
 import { Settings } from "../setting";
+import { Category } from "./types";
 
-export const enum Category {
-  Material = "物料",
-  Outlint = "大纲",
-  SourceCode = "源码",
-}
-
-const categoryOptions: { [key: string]: any } = {
+const categoryOptions: { [key: string]: React.ReactElement } = {
   [Category.Material]: <AppstoreOutlined />,
   [Category.Outlint]: <ApartmentOutlined />,
   [Category.SourceCode]: <CodeOutlined />,
 };
 
-const settingOptions: { [key: string]: any } = {
+const settingOptions: { [key: string]: React.ReactElement } = {
   [Settings.Attribute]: <SwitcherOutlined />,
   [Settings.Style]: <SkinOutlined />,
   [Settings.Event]: <TagsOutlined />,
