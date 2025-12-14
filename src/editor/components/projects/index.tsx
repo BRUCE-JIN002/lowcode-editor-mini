@@ -78,7 +78,7 @@ const Projects = () => {
 
   const curPreviewFile = useMemo(
     () => getFile(selectedFileKey)?.file ?? [],
-    [selectedFileKey]
+    [getFile, selectedFileKey]
   );
 
   return (

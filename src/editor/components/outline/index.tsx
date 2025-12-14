@@ -28,7 +28,9 @@ const Outline: React.FC = () => {
           trigger={"hover"}
           onConfirm={(e) => {
             e?.stopPropagation();
-            curComponentId && deleteComponent(curComponentId);
+            if (curComponentId) {
+              deleteComponent(curComponentId);
+            }
             setCurComponentId(null);
           }}
         >

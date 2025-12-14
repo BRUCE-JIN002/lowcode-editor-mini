@@ -12,7 +12,7 @@ interface FormData {
 
 const enum EditType {
   edit = "edit",
-  add = "add"
+  add = "add",
 }
 
 export default function SaveFileModal() {
@@ -48,7 +48,7 @@ export default function SaveFileModal() {
     if (fileName && open) {
       form.setFieldsValue({ filename: fileName });
     }
-  }, [open]);
+  }, [fileName]);
 
   return (
     <>
@@ -85,8 +85,8 @@ export default function SaveFileModal() {
             rules={[
               {
                 required: true,
-                message: "文件名不能为空"
-              }
+                message: "文件名不能为空",
+              },
             ]}
           >
             <Input
