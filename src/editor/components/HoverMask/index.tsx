@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { getComponentById, useComponetsStore } from "../../store/components";
 
@@ -11,7 +11,7 @@ interface HoverMaskProps {
 const HoverMask: React.FC<HoverMaskProps> = ({
   portalWrapperClassName,
   containerClassName,
-  componentId
+  componentId,
 }) => {
   const [position, setPosition] = useState({
     left: 0,
@@ -19,10 +19,10 @@ const HoverMask: React.FC<HoverMaskProps> = ({
     width: 0,
     height: 0,
     labelTop: 0,
-    labelLeft: 0
+    labelLeft: 0,
   });
 
-  function updatePosition() {
+  const updatePosition = useCallback(() => {
     if (!componentId) return;
 
     const container = document.querySelector(`.${containerClassName}`);
@@ -36,7 +36,7 @@ const HoverMask: React.FC<HoverMaskProps> = ({
       container.getBoundingClientRect();
 
     let labelTop = top - containerTop + container.scrollTop;
-    let labelLeft = left - containerLeft + width;
+    const labelLeft = left - containerLeft + width;
 
     if (labelTop <= 0) {
       labelTop -= 20;
@@ -48,33 +48,50 @@ const HoverMask: React.FC<HoverMaskProps> = ({
       width,
       height,
       labelTop,
-      labelLeft
+      labelLeft,
     });
-  }
+  }, [componentId, containerClassName]);
 
   const el = useMemo(() => {
     return document.querySelector(`.${portalWrapperClassName}`)!;
-  }, []);
+  }, [portalWrapperClassName]);
 
   const { components } = useComponetsStore();
 
   const curComponent = useMemo(() => {
     return getComponentById(componentId, components);
-  }, [componentId]);
+  }, [componentId, components]);
 
   useEffect(() => {
     updatePosition();
-  }, [componentId, components]);
+  }, [componentId, components, updatePosition]);
 
   useEffect(() => {
     const resizeHandler = () => {
       updatePosition();
     };
+
+    // 监听窗口大小变化
     window.addEventListener("resize", resizeHandler);
+
+    // 监听容器大小变化
+    const container = document.querySelector(`.${containerClassName}`);
+    let resizeObserver: ResizeObserver | null = null;
+
+    if (container) {
+      resizeObserver = new ResizeObserver(() => {
+        updatePosition();
+      });
+      resizeObserver.observe(container);
+    }
+
     return () => {
       window.removeEventListener("resize", resizeHandler);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
     };
-  }, []);
+  }, [containerClassName, updatePosition]);
 
   return createPortal(
     <>
@@ -90,7 +107,7 @@ const HoverMask: React.FC<HoverMaskProps> = ({
           height: position.height,
           zIndex: 12,
           borderRadius: 4,
-          boxSizing: "border-box"
+          boxSizing: "border-box",
         }}
       />
       <div
@@ -101,7 +118,7 @@ const HoverMask: React.FC<HoverMaskProps> = ({
           fontSize: "14px",
           zIndex: 13,
           display: !position.width || position.width < 10 ? "none" : "inline",
-          transform: "translate(-100%, -100%)"
+          transform: "translate(-100%, -100%)",
         }}
       >
         <div
@@ -111,7 +128,7 @@ const HoverMask: React.FC<HoverMaskProps> = ({
             color: "#fff",
             cursor: "pointer",
             whiteSpace: "nowrap",
-            fontSize: 12
+            fontSize: 12,
           }}
         >
           {curComponent?.desc}

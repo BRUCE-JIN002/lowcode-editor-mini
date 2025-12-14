@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { getComponentById, useComponetsStore } from "../../store/components";
 import { Dropdown, Popconfirm, Space } from "antd";
@@ -13,7 +13,7 @@ interface SelectedMaskProps {
 const SelectedMask: React.FC<SelectedMaskProps> = ({
   containerClassName,
   portalWrapperClassName,
-  componentId
+  componentId,
 }) => {
   const [position, setPosition] = useState({
     left: 0,
@@ -21,7 +21,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
     width: 0,
     height: 0,
     labelTop: 0,
-    labelLeft: 0
+    labelLeft: 0,
   });
 
   const {
@@ -29,30 +29,10 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
     curComponentId,
     curComponent,
     deleteComponent,
-    setCurComponentId
+    setCurComponentId,
   } = useComponetsStore();
 
-  useEffect(() => {
-    updatePosition();
-  }, [componentId]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      updatePosition();
-    }, 200);
-  }, [components]);
-
-  useEffect(() => {
-    const resizeHandler = () => {
-      updatePosition();
-    };
-    window.addEventListener("resize", resizeHandler);
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
-
-  function updatePosition() {
+  const updatePosition = useCallback(() => {
     if (!componentId) return;
 
     const container = document.querySelector(`.${containerClassName}`);
@@ -66,7 +46,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
       container.getBoundingClientRect();
 
     let labelTop = top - containerTop + container.scrollTop;
-    let labelLeft = left - containerLeft + width;
+    const labelLeft = left - containerLeft + width;
 
     if (labelTop <= 0) {
       labelTop -= -20;
@@ -74,21 +54,58 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
 
     setPosition({
       top: top - containerTop + container.scrollTop,
-      left: left - containerLeft + container.scrollTop,
+      left: left - containerLeft + container.scrollLeft,
       width,
       height,
       labelTop,
-      labelLeft
+      labelLeft,
     });
-  }
+  }, [componentId, containerClassName]);
+
+  useEffect(() => {
+    updatePosition();
+  }, [componentId, updatePosition]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      updatePosition();
+    }, 200);
+  }, [components, updatePosition]);
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      updatePosition();
+    };
+
+    // 监听窗口大小变化
+    window.addEventListener("resize", resizeHandler);
+
+    // 监听容器大小变化
+    const container = document.querySelector(`.${containerClassName}`);
+    let resizeObserver: ResizeObserver | null = null;
+
+    if (container) {
+      resizeObserver = new ResizeObserver(() => {
+        updatePosition();
+      });
+      resizeObserver.observe(container);
+    }
+
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
+  }, [containerClassName, updatePosition]);
 
   const el = useMemo(() => {
     return document.querySelector(`.${portalWrapperClassName}`)!;
-  }, []);
+  }, [portalWrapperClassName]);
 
   const curSelectedComponent = useMemo(() => {
     return getComponentById(componentId, components);
-  }, [componentId]);
+  }, [componentId, components]);
 
   function handleDelete() {
     deleteComponent(curComponentId!);
@@ -105,7 +122,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
     }
 
     return parentComponents;
-  }, [curComponent]);
+  }, [curComponent, components]);
 
   return (
     el &&
@@ -123,7 +140,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
             height: position.height,
             zIndex: 12,
             borderRadius: 4,
-            boxSizing: "border-box"
+            boxSizing: "border-box",
           }}
         />
         <div
@@ -134,7 +151,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
             fontSize: "14px",
             zIndex: 13,
             display: !position.width || position.width < 10 ? "none" : "inline",
-            transform: "translate(-100%, -100%)"
+            transform: "translate(-100%, -100%)",
           }}
         >
           <Space>
@@ -142,11 +159,11 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
               menu={{
                 items: parentComponents.map((item) => ({
                   key: item.id,
-                  label: item.desc
+                  label: item.desc,
                 })),
                 onClick: ({ key }) => {
                   setCurComponentId(+key);
-                }
+                },
               }}
               disabled={parentComponents.length === 0}
             >
@@ -156,7 +173,7 @@ const SelectedMask: React.FC<SelectedMaskProps> = ({
                   backgroundColor: "skyblue",
                   color: "#fff",
                   cursor: "pointer",
-                  whiteSpace: "nowrap"
+                  whiteSpace: "nowrap",
                 }}
               >
                 {curSelectedComponent?.desc}
