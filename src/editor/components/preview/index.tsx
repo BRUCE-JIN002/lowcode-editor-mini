@@ -3,6 +3,7 @@ import { message } from "antd";
 import { Component } from "../../store/components";
 import { useComponentConfigStore } from "../../store/component-config";
 import { ActionConfig } from "../setting/ActionModal";
+import ErrorBoundary from "./ErrorBoundary";
 interface PreviewProps {
   components: Component[];
 }
@@ -15,7 +16,12 @@ const Preview: React.FC<PreviewProps> = (props) => {
   function handleEvent(component: Component) {
     const props: Record<string, unknown> = {};
 
-    componentConfig[component.name].events?.forEach((event) => {
+    const config = componentConfig?.[component.name];
+    if (!config?.events) {
+      return props;
+    }
+
+    config.events.forEach((event) => {
       const eventConfig = component.props[event.name];
 
       if (eventConfig) {
@@ -65,33 +71,55 @@ const Preview: React.FC<PreviewProps> = (props) => {
   }
 
   function renderComponents(components: Component[]): React.ReactNode {
+    if (!components || !Array.isArray(components)) {
+      return null;
+    }
+
     return components.map((component: Component) => {
+      if (!component || !component.name) {
+        return null;
+      }
+
       const config = componentConfig?.[component.name];
 
       if (!config?.prod) {
+        console.warn(`No prod config found for component: ${component.name}`);
         return null;
+      }
+
+      const elementProps = {
+        key: component.id,
+        id: component.id,
+        name: component.name,
+        styles: component.styles,
+        ...config.defaultProps,
+        ...component.props,
+        ...handleEvent(component),
+      };
+
+      // 只给特定的组件类型添加 ref，避免给普通函数组件添加 ref
+      const componentsWithRef = ["Form", "Modal"];
+      if (componentsWithRef.includes(component.name)) {
+        elementProps.ref = (ref?: Record<string, unknown>) => {
+          if (ref) {
+            componentRefs.current[component.id] = ref;
+          }
+        };
       }
 
       return React.createElement(
         config.prod,
-        {
-          key: component.id,
-          id: component.id,
-          name: component.name,
-          styles: component.styles,
-          ref: (ref?: Record<string, unknown>) => {
-            componentRefs.current[component.id] = ref;
-          },
-          ...config.defaultProps,
-          ...component.props,
-          ...handleEvent(component),
-        },
+        elementProps,
         renderComponents(component.children || [])
       );
     });
   }
 
-  return <div>{renderComponents(components)}</div>;
+  return (
+    <ErrorBoundary>
+      <div>{renderComponents(components)}</div>
+    </ErrorBoundary>
+  );
 };
 
 export default Preview;
