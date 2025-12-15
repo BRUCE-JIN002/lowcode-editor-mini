@@ -8,35 +8,37 @@ function Table({ id, name, children, styles }: CommonComponentProps) {
   const { canDrop, drop } = useMaterailDrop(["TableColumn"], id);
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [_, drag] = useDrag({
+  const [, drag] = useDrag({
     type: name,
     item: {
       type: name,
       dragType: "move",
-      id: id
-    }
+      id: id,
+    },
   });
 
   useEffect(() => {
     drag(divRef);
     drop(divRef);
-  }, []);
+  }, [drag, drop]);
 
   const columns = useMemo(() => {
-    return React.Children.map(children, (item: any) => {
-      return {
-        title: (
-          <div
-            className="m-[-16px] p-[16px] text-sm"
-            data-component-id={item.props?.id}
-          >
-            {item.props?.title}
-          </div>
-        ),
-        dataIndex: item.props?.dataIndex,
-        key: item
-      };
-    });
+    return React.Children.toArray(children)
+      .filter((item): item is React.ReactElement => React.isValidElement(item))
+      .map((item) => {
+        return {
+          title: (
+            <div
+              className="m-[-16px] p-[16px] text-sm"
+              data-component-id={item.props?.id}
+            >
+              {item.props?.title}
+            </div>
+          ),
+          dataIndex: item.props?.dataIndex,
+          key: item.key || item.props?.id,
+        };
+      });
   }, [children]);
 
   return (

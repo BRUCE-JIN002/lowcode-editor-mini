@@ -10,16 +10,16 @@ interface PreviewProps {
 const Preview: React.FC<PreviewProps> = (props) => {
   const { components } = props;
   const { componentConfig } = useComponentConfigStore();
-  const componentRefs = useRef<Record<string, any>>({});
+  const componentRefs = useRef<Record<string, unknown>>({});
 
   function handleEvent(component: Component) {
-    const props: Record<string, any> = {};
+    const props: Record<string, unknown> = {};
 
     componentConfig[component.name].events?.forEach((event) => {
       const eventConfig = component.props[event.name];
 
       if (eventConfig) {
-        props[event.name] = (...args: any[]) => {
+        props[event.name] = (...args: unknown[]) => {
           eventConfig?.actions?.forEach((action: ActionConfig) => {
             if (action.type === "goToLink") {
               window.location.href = action.url;
@@ -44,8 +44,17 @@ const Preview: React.FC<PreviewProps> = (props) => {
             } else if (action.type === "componentMethod") {
               const component =
                 componentRefs.current[action.config.componentId];
-              if (component) {
-                component[action.config.method]?.(...args);
+              if (
+                component &&
+                typeof component === "object" &&
+                component !== null
+              ) {
+                const method = (component as Record<string, unknown>)[
+                  action.config.method
+                ];
+                if (typeof method === "function") {
+                  method(...args);
+                }
               }
             }
           });
@@ -70,7 +79,7 @@ const Preview: React.FC<PreviewProps> = (props) => {
           id: component.id,
           name: component.name,
           styles: component.styles,
-          ref: (ref?: Record<string, any>) => {
+          ref: (ref?: Record<string, unknown>) => {
             componentRefs.current[component.id] = ref;
           },
           ...config.defaultProps,

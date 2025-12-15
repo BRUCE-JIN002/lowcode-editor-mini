@@ -48,7 +48,7 @@ export default function SaveFileModal() {
     if (fileName && open) {
       form.setFieldsValue({ filename: fileName });
     }
-  }, [fileName]);
+  }, [fileName, open, form]);
 
   return (
     <>

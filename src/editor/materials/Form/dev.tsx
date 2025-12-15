@@ -11,13 +11,13 @@ function Form({ id, name, children, onFinish }: CommonComponentProps) {
 
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [_, drag] = useDrag({
+  const [, drag] = useDrag({
     type: name,
     item: {
       type: name,
       dragType: "move",
-      id: id
-    }
+      id: id,
+    },
   });
 
   useEffect(() => {
@@ -26,14 +26,16 @@ function Form({ id, name, children, onFinish }: CommonComponentProps) {
   }, []);
 
   const formItems = useMemo(() => {
-    return React.Children.map(children, (item: any) => {
-      return {
-        label: item.props?.label,
-        name: item.props?.name,
-        type: item.props?.type,
-        id: item.props?.id
-      };
-    });
+    return React.Children.toArray(children)
+      .filter((item): item is React.ReactElement => React.isValidElement(item))
+      .map((item) => {
+        return {
+          label: item.props?.label,
+          name: item.props?.name,
+          type: item.props?.type,
+          id: item.props?.id,
+        };
+      });
   }, [children]);
 
   return (
@@ -50,7 +52,7 @@ function Form({ id, name, children, onFinish }: CommonComponentProps) {
         form={form}
         onFinish={(values) => onFinish?.(values)}
       >
-        {formItems.map((item: any) => {
+        {formItems?.map((item) => {
           return (
             <AntdForm.Item
               key={item.name}
